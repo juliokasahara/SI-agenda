@@ -3,10 +3,7 @@ package com.di.relacional.controller;
 import com.di.relacional.controller.dto.AgendaDTO;
 import com.di.relacional.controller.form.AgendaForm;
 import com.di.relacional.model.Agenda;
-import com.di.relacional.serve.AgendaService;
-import com.di.relacional.serve.ClienteService;
-import com.di.relacional.serve.ServicoService;
-import com.di.relacional.serve.UsuarioService;
+import com.di.relacional.serve.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +22,9 @@ public class AgendaController {
     private ServicoService servicoService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private FuncionarioService funcionarioService;
+
     @Autowired
     private ClienteService clienteService;
 
@@ -45,6 +45,7 @@ public class AgendaController {
         ModelAndView modelAndView = new ModelAndView("cadastro-agenda");
         modelAndView.addObject("agenda", new AgendaDTO());
         modelAndView.addObject("servicos", servicoService.findAll());
+        modelAndView.addObject("funcionarios", funcionarioService.findAll());
         modelAndView.addObject("clientes", clienteService.findAll());
         modelAndView.addObject("usuarios", usuarioService.findAll());
         return modelAndView;
@@ -75,6 +76,7 @@ public class AgendaController {
         modelAndView.addObject("agenda", agenda);
         modelAndView.addObject("clientes", clienteService.findAll());
         modelAndView.addObject("usuarios", usuarioService.findAll());
+        modelAndView.addObject("funcionarios", funcionarioService.findAll());
         modelAndView.addObject("servicos", servicoService.findAll());
 
         List<Long> servicoIds = agenda.getAgendaServicos()

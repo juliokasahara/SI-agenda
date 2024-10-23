@@ -29,6 +29,8 @@ public class AgendaService {
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
+    private FuncionarioService funcionarioService;
+    @Autowired
     private ServicoService servicoService;
 
     public List<Agenda> findAll(){
@@ -45,8 +47,9 @@ public class AgendaService {
             agenda = excluirServicos(id,agendaForm);
         }
 
-        Cliente cliente = clienteService.findById(Long.parseLong(agendaForm.getCliente()));
-        Usuario usuario = usuarioService.findById(Long.parseLong(agendaForm.getUsuario()));
+        Cliente cliente = clienteService.findById(Long.parseLong(agendaForm.getClienteId()));
+        Usuario usuario = usuarioService.findById(Long.parseLong(agendaForm.getUsuarioId()));
+        Funcionario funcionario = funcionarioService.findById(Long.parseLong(agendaForm.getFuncionarioId()));
 
         List<Servico> servicos = new ArrayList<>();
         if(Objects.nonNull(agendaForm.getServicoIds())) {
@@ -61,6 +64,7 @@ public class AgendaService {
         agenda.setData(formatter.parse(agendaForm.getData()));
         agenda.setCliente(cliente);
         agenda.setUsuario(usuario);
+        agenda.setFuncionario(funcionario);
 
         for (Servico servico: servicos) {
             AgendaServico agendaServico = new AgendaServico(agenda,servico, ServicoStatusEnum.ABERTO.getStatus());

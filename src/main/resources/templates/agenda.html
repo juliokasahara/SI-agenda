@@ -35,6 +35,10 @@
                     <h4><strong>Nome:</strong> <span th:text="${agenda.cliente.nome}">Nome do Cliente</span></h4>
                     <p><strong>Telefone:</strong> <span th:text="${agenda.cliente.telefone}">Telefone do Cliente</span></p>
                     <p><strong>Email:</strong> <span th:text="${agenda.cliente.email}">Email do Cliente</span></p>
+                    <hr>
+                    <h4><strong>Funcionario:</strong> <span th:text="${agenda.funcionario.nome}">Nome do Cliente</span></h4>
+                    <p><strong>Telefone:</strong> <span th:text="${agenda.funcionario.telefone}">Telefone do Cliente</span></p>
+                    <p><strong>Email:</strong> <span th:text="${agenda.funcionario.email}">Email do Cliente</span></p>
                 </div>
                 <div class="col-md-6">
                     <!-- Endereço do cliente -->
@@ -99,20 +103,6 @@
     function editarAgenda(id) {
         window.location.href = `/agenda/editar/${id}`;
     }
-<!--    function editarAgenda(id) {-->
-<!--        fetch(`/agenda/editar/${id}`, {-->
-<!--            method: 'PUT',-->
-<!--            headers: {-->
-<!--                'Content-Type': 'application/json'-->
-<!--            },-->
-<!--            body: JSON.stringify({-->
-<!--                // Inclua aqui os campos que você deseja atualizar-->
-<!--                // Exemplo: nome: 'Novo Nome'-->
-<!--            })-->
-<!--        }).catch(error => {-->
-<!--            console.error('Erro:', error);-->
-<!--            alert('Erro ao editar agenda');-->
-<!--        });-->
-<!--    }-->
+
 </script>
 </html>

@@ -18,7 +18,8 @@ public class AgendaDTO {
     private String descricao;
     private Date data;
     private List<Long> servicoIds;
-    private Long cliente;
-    private Long usuario;
+    private Long clienteId;
+    private Long funcionarioId;
+    private Long usuarioId;
 
 }

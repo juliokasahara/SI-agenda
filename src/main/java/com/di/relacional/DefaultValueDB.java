@@ -26,6 +26,8 @@ public class DefaultValueDB {
     @Autowired
     private AgendaRepository agendaRepository;
     @Autowired
+    private FuncionarioRepository funcionarioRepository;
+    @Autowired
     private EnderecoRepository enderecoRepository;
     @Autowired
     private TipoAcessoRepository tipoAcessoRepository;
@@ -59,7 +61,9 @@ public class DefaultValueDB {
 
                 Endereco enderecoCarla = new Endereco(null,"Rua 1","SP","SP","14800-200","Araraquara","332",null);
                 Endereco enderecoJao = new Endereco(null,"Rua 1","SP","SP","14800-200","Araraquara","332",null);
+                Endereco enderecoAndre = new Endereco(null,"Rua 1","SP","SP","14800-200","Araraquara","332",null);
                 enderecoCarla = enderecoRepository.save(enderecoCarla);
+                enderecoAndre = enderecoRepository.save(enderecoAndre);
                 enderecoJao = enderecoRepository.save(enderecoJao);
 
                 Servico servicoCorte = new Servico(null,"Corte",new BigDecimal(30.00),null);
@@ -75,7 +79,10 @@ public class DefaultValueDB {
                 Cliente cliente2 = new Cliente(null,"Cliente João","99999999","joao@teste.com",enderecoJao,null);
                 cliente = clienteRepository.save(cliente);
                 clienteRepository.save(cliente2);
-                Agenda agendaCarla = new Agenda(null,"Cortar Cabelo + Pintar Cabelo", new Date(),null,cliente,ana);
+
+                Funcionario funcionarioAndre = new Funcionario(null,"Funcionario Andre","99999999","joao@teste.com", new BigDecimal(1300.00),enderecoAndre);
+                funcionarioAndre = funcionarioRepository.save(funcionarioAndre);
+                Agenda agendaCarla = new Agenda(null,"Cortar Cabelo + Pintar Cabelo", new Date(),null,cliente,ana,funcionarioAndre);
                 agendaCarla = agendaRepository.save(agendaCarla);
 
                 AgendaServico agendaServico = new AgendaServico(agendaCarla, servicoCorte, ServicoStatusEnum.ABERTO.getStatus());
