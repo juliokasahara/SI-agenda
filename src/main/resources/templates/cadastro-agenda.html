@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Agenda</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Cadastrar Nova Agenda</h1>
+
+<!--    <form th:action="@{/agenda/salvar/{id}(id=${agenda.id})}" th:object="${agenda}" method="post" class="mt-4">-->
+    <div th:if="${agenda.id == null}">
+        <form th:object="${agenda}" th:action="@{/agenda/salvar}" method="post" class="mt-4">
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição do Serviço</label>
+                <input type="text" id="descricao" th:field="*{descricao}" class="form-control" placeholder="Digite a descrição do serviço" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="data" class="form-label">Data do Serviço</label>
+                <input type="datetime-local" id="data" th:field="*{data}" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Serviços</label>
+                <div th:each="servico : ${servicos}">
+                    <input type="checkbox"
+                           th:id="'servico-' + ${servico.id}"
+                           th:name="servicoIds"
+                           th:value="${servico.id}"
+                           th:checked="${servicoIds != null && servicoIds.contains(servico.id)}"
+                           class="form-check-input">
+                    <label th:for="'servico-' + ${servico.id}" th:text="${servico.nome}" class="form-check-label"></label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                <select id="cliente" th:field="*{cliente}" class="form-select" required>
+                    <option value=""  selected>Selecione um cliente</option>
+                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="usuario" class="form-label">Usuário Responsável</label>
+                <select id="usuario" th:field="*{usuario}" class="form-select" required>
+                    <option value=""  selected>Selecione um usuário</option>
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.usuario}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cadastrar Agenda</button>
+        </form>
+    </div>
+
+
+    <div th:if="${agenda.id != null}">
+        <form th:action="@{/agenda/salvar/{id}(id=${agenda.id})}" th:object="${agenda}" method="post" class="mt-4">
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição do Serviço</label>
+                <input type="text" id="descricao" th:field="*{descricao}" class="form-control" placeholder="Digite a descrição do serviço" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="data" class="form-label">Data do Serviço</label>
+                <input type="datetime-local" id="data" th:field="*{data}" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Serviços</label>
+                <div th:each="servico : ${servicos}">
+                    <input type="checkbox"
+                           th:id="'servico-' + ${servico.id}"
+                           th:name="servicoIds"
+                           th:value="${servico.id}"
+                           th:checked="${servicoIds != null && servicoIds.contains(servico.id)}"
+                           class="form-check-input">
+                    <label th:for="'servico-' + ${servico.id}" th:text="${servico.nome}" class="form-check-label"></label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                <select id="cliente" th:field="*{cliente}" class="form-select" required>
+                    <option value=""  selected>Selecione um cliente</option>
+                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="usuario" class="form-label">Usuário Responsável</label>
+                <select id="usuario" th:field="*{usuario}" class="form-select" required>
+                    <option value=""  selected>Selecione um usuário</option>
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.usuario}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cadastrar Agenda</button>
+        </form>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

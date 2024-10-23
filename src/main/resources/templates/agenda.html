@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Serviços</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Agenda de Serviços</h1>
+    <button type="button" class="btn btn-success" th:onclick="'window.location.href=\'/agenda/cadastrar\' '">Cadastrar</button>
+    <!-- Loop para cada agenda -->
+    <div th:each="agenda : ${agendas}" class="card mt-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2 class="card-title">Descrição Agenda: <span th:text="${agenda.descricao}">Descrição do Serviço</span></h2>
+                    <p class="card-subtitle text-muted">Data: <span th:text="${#dates.format(agenda.data, 'dd/MM/yyyy HH:mm')}">Data do Serviço</span></p>
+                </div>
+                <div class="col-md-2" style="align-content: center;">
+                    <button type="button" class="btn btn-primary"  th:onclick="'editarAgenda(' + ${agenda.id} + ')'">Editar</button>
+                    <button type="button" class="btn btn-danger" th:onclick="'deletarAgenda(' + ${agenda.id} + ')'">
+                        Deletar
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Seção de Clientes -->
+            <h3 class="mb-3">Cliente</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><strong>Nome:</strong> <span th:text="${agenda.cliente.nome}">Nome do Cliente</span></h4>
+                    <p><strong>Telefone:</strong> <span th:text="${agenda.cliente.telefone}">Telefone do Cliente</span></p>
+                    <p><strong>Email:</strong> <span th:text="${agenda.cliente.email}">Email do Cliente</span></p>
+                </div>
+                <div class="col-md-6">
+                    <!-- Endereço do cliente -->
+                    <h5>Endereço</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Logradouro: <span th:text="${agenda.cliente.endereco.logradouro}"></span></li>
+                        <li class="list-group-item">Número: <span th:text="${agenda.cliente.endereco.numero}"></span></li>
+                        <li class="list-group-item">Cidade: <span th:text="${agenda.cliente.endereco.cidade}"></span></li>
+                        <li class="list-group-item">UF: <span th:text="${agenda.cliente.endereco.uf}"></span></li>
+                        <li class="list-group-item">CEP: <span th:text="${agenda.cliente.endereco.cep}"></span></li>
+                        <li class="list-group-item">Complemento: <span th:text="${agenda.cliente.endereco.complemento != null ? cliente.endereco.complemento : 'Sem Complemento'}"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Seção de Serviços Agendados -->
+            <h3 class="mt-4 mb-3">Serviços Agendado</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="agendaServico : ${agenda.agendaServicos}">
+                            <strong>Nome do Serviço:</strong> <span th:text="${agendaServico.servico.nome}"></span><br>
+                            <strong>Valor do Serviço:</strong> <span th:text="${agendaServico.servico.valor}"></span><br>
+                            <strong>Status:</strong> <span th:text="${agendaServico.statusEnum}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Usuário Responsável -->
+            <h3 class="mt-4">Usuário Responsável - <span th:text="${agenda.usuario.usuario}"></span></h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Data de Cadastro:</strong> <span th:text="${#dates.format(agenda.usuario.dtCadastro, 'dd/MM/yyyy HH:mm')}">Data de Cadastro</span></p>
+                    <p><strong>Tipo de Acesso:</strong> <span th:text="${agenda.usuario.tipoAcesso.descricao}">Tipo de Acesso</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+<script>
+    function deletarAgenda(id) {
+        fetch(`/agenda/deletar/${id}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                alert('Agenda deletada com sucesso!');
+                window.location.href = '/agenda';
+            } else {
+                alert('Erro ao deletar agenda');
+            }
+        }).catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao deletar agenda');
+        });
+    }
+
+    function editarAgenda(id) {
+        window.location.href = `/agenda/editar/${id}`;
+    }
+<!--    function editarAgenda(id) {-->
+<!--        fetch(`/agenda/editar/${id}`, {-->
+<!--            method: 'PUT',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json'-->
+<!--            },-->
+<!--            body: JSON.stringify({-->
+<!--                // Inclua aqui os campos que você deseja atualizar-->
+<!--                // Exemplo: nome: 'Novo Nome'-->
+<!--            })-->
+<!--        }).catch(error => {-->
+<!--            console.error('Erro:', error);-->
+<!--            alert('Erro ao editar agenda');-->
+<!--        });-->
+<!--    }-->
+</script>
+</html>
