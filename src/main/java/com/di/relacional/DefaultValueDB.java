@@ -1,5 +1,6 @@
 package com.di.relacional;
 
+import com.di.relacional.client.AddressClient;
 import com.di.relacional.enummeration.ServicoStatusEnum;
 import com.di.relacional.model.*;
 import com.di.relacional.repository.*;
@@ -43,6 +44,7 @@ public class DefaultValueDB {
                                                TipoAcessoRepository tipoAcessoRepository,
                                                AgendaServicoRepository agendaServicoRepository){
         return args -> {
+
             List<Usuario> usuarioList = usuarioRepository.findAll();
 
             if(usuarioList.isEmpty()){

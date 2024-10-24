@@ -4,7 +4,8 @@ import com.di.relacional.client.response.AddressResponse;
 import com.di.relacional.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "addressClient",
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
         configuration = FeignConfig.class
 )
 public interface AddressClient {
-    @PostMapping("/{cep}/json")
+    @GetMapping("/{cep}/json")
     ResponseEntity<AddressResponse> findCep(
-            @RequestAttribute("cep") String cep
+            @PathVariable("cep") String cep
     );
 }
 
