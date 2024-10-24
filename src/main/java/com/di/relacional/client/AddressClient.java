@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(
-        name = "geminiClient",
+        name = "addressClient",
         url = "https://viacep.com.br/ws",
         configuration = FeignConfig.class
 )
-public interface AddressFeignClient {
+public interface AddressClient {
     @PostMapping("/{cep}/json")
     ResponseEntity<AddressResponse> findCep(
             @RequestAttribute("cep") String cep
