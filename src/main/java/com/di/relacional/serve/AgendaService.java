@@ -9,6 +9,7 @@ import com.di.relacional.repository.AgendaServicoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,12 +86,39 @@ public class AgendaService {
         return agenda;
     }
 
-    public void deletar(Long id) {
+    public String deletar(Long id) {
         var agenda = agendaRepository.findById(id).orElseThrow(() -> new ClienteNotFoundException("Agenda com ID " + id + " não encontrado"));
+        Boolean deletar = podeDeletar(agenda);
+        if (deletar) {
+            return"Erro ao excluir, existem agendamentos concluídos";
+        }
         agendaRepository.delete(agenda);
+        return "Agenda deletada com sucesso";
+    }
+
+    public Boolean podeDeletar(Agenda agenda) {
+        for (AgendaServico agendaServico: agenda.getAgendaServicos()) {
+            if(agendaServico.getStatusEnum().equals(ServicoStatusEnum.CONCLUIDO.toString())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Agenda findById(Long id) {
         return agendaRepository.findById(id).orElseThrow(() -> new ClienteNotFoundException("Agenda com ID " + id + " não encontrado"));
+    }
+
+    public void atualizarStatus(Long idServico,Long idAgenda) {
+        AgendaServicoId idAgendaServicoId = new AgendaServicoId();
+        idAgendaServicoId.setServicoId(idServico);
+        idAgendaServicoId.setAgendaId(idAgenda);
+        AgendaServico agendaServico = agendaServicoRepository.findById(idAgendaServicoId).orElseThrow(() -> new ClienteNotFoundException("Agenda com ID " + idAgendaServicoId + " não encontrado"));
+        if(agendaServico.getStatusEnum().equals(ServicoStatusEnum.ABERTO.toString())){
+            agendaServico.setStatusEnum(ServicoStatusEnum.CONCLUIDO.getStatus());
+        }else{
+            agendaServico.setStatusEnum(ServicoStatusEnum.ABERTO.getStatus());
+        }
+        agendaServicoRepository.save(agendaServico);
     }
 }

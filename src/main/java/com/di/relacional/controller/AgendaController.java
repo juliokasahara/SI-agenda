@@ -5,6 +5,7 @@ import com.di.relacional.controller.form.AgendaForm;
 import com.di.relacional.model.Agenda;
 import com.di.relacional.serve.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,7 +25,6 @@ public class AgendaController {
     private UsuarioService usuarioService;
     @Autowired
     private FuncionarioService funcionarioService;
-
     @Autowired
     private ClienteService clienteService;
 
@@ -69,27 +69,41 @@ public class AgendaController {
 
     @GetMapping("/editar/{id}")
     public ModelAndView editarAgenda(@PathVariable("id") Long id){
-        ModelAndView modelAndView = new ModelAndView("cadastro-agenda");
 
+        ModelAndView modelAndView = new ModelAndView("cadastro-agenda");
         var agenda = agendaService.findById(id);
+
+        if(agendaService.podeDeletar(agenda)){
+            return new ModelAndView("redirect:/agenda");
+        }
+
+        List<Long> servicoIds = agenda.getAgendaServicos()
+                .stream()
+                .map(agendaServico -> agendaServico.getServico().getId()).collect(Collectors.toList());
 
         modelAndView.addObject("agenda", agenda);
         modelAndView.addObject("clientes", clienteService.findAll());
         modelAndView.addObject("usuarios", usuarioService.findAll());
         modelAndView.addObject("funcionarios", funcionarioService.findAll());
         modelAndView.addObject("servicos", servicoService.findAll());
-
-        List<Long> servicoIds = agenda.getAgendaServicos()
-                                    .stream()
-                                    .map(agendaServico -> agendaServico.getServico().getId()).collect(Collectors.toList());
-
         modelAndView.addObject("servicoIds", servicoIds);
+
         return modelAndView;
     }
 
+    @GetMapping("/atualizar/{idAgenda}/servico/{idServico}")
+    public ModelAndView atualizarAgenda(
+            @PathVariable("idAgenda") Long idAgenda,
+            @PathVariable("idServico") Long idServico
+    ){
+        agendaService.atualizarStatus(idServico,idAgenda);
+        return buscarTodos();
+    }
     @DeleteMapping("/deletar/{id}")
-    public void deletarAgenda(@PathVariable("id") Long id){
-        agendaService.deletar(id);
+    public ResponseEntity<String> deletarAgenda(@PathVariable("id") Long id){
+
+        String message = agendaService.deletar(id);
+        return ResponseEntity.ok(message);
     }
 
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Serviços</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Agenda de Funcionario</h1>
+    <!-- Loop para cada agenda -->
+    <div th:each="funcionario : ${funcionarios}" class="card mt-3">
+
+        <div class="card-body">
+            <!-- Seção de Clientes -->
+            <h3 class="mb-3">Cliente</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><strong>Nome:</strong> <span th:text="${funcionario.nome}">Nome do Cliente</span></h4>
+                    <p><strong>Telefone:</strong> <span th:text="${funcionario.telefone}">Telefone do Cliente</span></p>
+                    <p><strong>Email:</strong> <span th:text="${funcionarioemail}">Email do Cliente</span></p>
+                </div>
+                <div class="col-md-6">
+                    <!-- Endereço do cliente -->
+                    <h5>Endereço</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Logradouro: <span th:text="${funcionario.endereco.logradouro}"></span></li>
+                        <li class="list-group-item">Número: <span th:text="${funcionario.endereco.numero}"></span></li>
+                        <li class="list-group-item">Cidade: <span th:text="${funcionario.endereco.cidade}"></span></li>
+                        <li class="list-group-item">UF: <span th:text="${funcionario.endereco.uf}"></span></li>
+                        <li class="list-group-item">Estado: <span th:text="${funcionario.endereco.estado}"></span></li>
+                        <li class="list-group-item">CEP: <span th:text="${funcionario.endereco.cep}"></span></li>
+                        <li class="list-group-item">Complemento: <span th:text="${funcionario.endereco.complemento != null ? funcionario.endereco.complemento : 'Sem Complemento'}"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

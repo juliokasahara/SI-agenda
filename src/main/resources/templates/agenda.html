@@ -8,7 +8,9 @@
 <body>
 <div class="container mt-5">
     <h1 class="text-center">Agenda de Serviços</h1>
-    <button type="button" class="btn btn-success" th:onclick="'window.location.href=\'/agenda/cadastrar\' '">Cadastrar</button>
+    <button type="button" class="btn btn-info" th:onclick="'window.location.href=\'/agenda/cadastrar\' '">Cadastrar Agenda</button>
+    <button type="button" class="btn btn-primary" th:onclick="'window.location.href=\'/funcionario/cadastrar\' '">Cadastrar Funcionario</button>
+    <button type="button" class="btn btn-warning" th:onclick="'window.location.href=\'/funcionario\' '">Lista Funcionario</button>
     <!-- Loop para cada agenda -->
     <div th:each="agenda : ${agendas}" class="card mt-3">
         <div class="card-header">
@@ -62,7 +64,8 @@
                         <li class="list-group-item" th:each="agendaServico : ${agenda.agendaServicos}">
                             <strong>Nome do Serviço:</strong> <span th:text="${agendaServico.servico.nome}"></span><br>
                             <strong>Valor do Serviço:</strong> <span th:text="${agendaServico.servico.valor}"></span><br>
-                            <strong>Status:</strong> <span th:text="${agendaServico.statusEnum}"></span>
+                            <strong>Status:</strong>
+                            <button type="button" th:class="${agendaServico.statusEnum == 'A' ? 'btn btn-success' : 'btn btn-danger'}" th:onclick="'atualizarAgenda(' + ${agenda.id} + ', ' + ${agendaServico.servico.id} + ')'"><span th:text="${agendaServico.statusEnum == 'A' ? 'Aberto' : 'Concluído'}"></span></button>
                         </li>
                     </ul>
                 </div>
@@ -84,25 +87,34 @@
 </body>
 
 <script>
-    function deletarAgenda(id) {
-        fetch(`/agenda/deletar/${id}`, {
-            method: 'DELETE'
-        }).then(response => {
-            if (response.ok) {
-                alert('Agenda deletada com sucesso!');
+        function deletarAgenda(id) {
+            fetch(`/agenda/deletar/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Erro ao deletar agenda');
+                }
+            })
+            .then(message => {
+                alert(message);
                 window.location.href = '/agenda';
-            } else {
+            })
+            .catch(error => {
+                console.error('Erro:', error);
                 alert('Erro ao deletar agenda');
-            }
-        }).catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao deletar agenda');
-        });
-    }
+            });
+        }
 
-    function editarAgenda(id) {
-        window.location.href = `/agenda/editar/${id}`;
-    }
+        function editarAgenda(id) {
+            window.location.href = `/agenda/editar/${id}`;
+        }
+
+        function atualizarAgenda(idAgenda,idServico) {
+            window.location.href = `/agenda/atualizar/${idAgenda}/servico/${idServico}`;
+        }
 
 </script>
 </html>

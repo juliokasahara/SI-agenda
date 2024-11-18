@@ -9,7 +9,6 @@
 <div class="container">
     <h1 class="mt-5">Cadastrar Nova Agenda</h1>
 
-<!--    <form th:action="@{/agenda/salvar/{id}(id=${agenda.id})}" th:object="${agenda}" method="post" class="mt-4">-->
     <div th:if="${agenda.id == null}">
         <form th:object="${agenda}" th:action="@{/agenda/salvar}" method="post" class="mt-4">
 

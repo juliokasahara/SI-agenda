@@ -2,7 +2,7 @@ package com.di.relacional.enummeration;
 
 public enum ServicoStatusEnum {
     ABERTO("A"),
-    FECHADO("F");
+    CONCLUIDO("C");
     private String status;
 
     ServicoStatusEnum(String status) {
