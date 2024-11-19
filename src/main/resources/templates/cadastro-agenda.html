@@ -37,7 +37,7 @@
 
             <div class="mb-3">
                 <label for="funcionario" class="form-label">Funcionario</label>
-                <select id="funcionario" th:field="*{funcionarioId}" class="form-select" required>
+                <select id="funcionario" th:field="*{funcionario}" class="form-select" required>
                     <option value=""  selected>Selecione um funcionario</option>
                     <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
                 </select>
@@ -45,7 +45,7 @@
 
             <div class="mb-3">
                 <label for="cliente" class="form-label">Cliente</label>
-                <select id="cliente" th:field="*{clienteId}" class="form-select" required>
+                <select id="cliente" th:field="*{cliente}" class="form-select" required>
                     <option value=""  selected>Selecione um cliente</option>
                     <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
                 </select>
@@ -53,7 +53,7 @@
 
             <div class="mb-3">
                 <label for="usuario" class="form-label">Usuário Responsável</label>
-                <select id="usuario" th:field="*{usuarioId}" class="form-select" required>
+                <select id="usuario" th:field="*{usuario}" class="form-select" required>
                     <option value=""  selected>Selecione um usuário</option>
                     <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.usuario}"></option>
                 </select>

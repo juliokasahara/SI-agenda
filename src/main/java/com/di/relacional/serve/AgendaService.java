@@ -8,14 +8,14 @@ import com.di.relacional.repository.AgendaRepository;
 import com.di.relacional.repository.AgendaServicoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,18 +39,30 @@ public class AgendaService {
     }
 
     @Transactional
-    public void saveAndUpdate(AgendaForm agendaForm,Long id) throws ParseException {
+    public ResponseEntity<String> saveAndUpdate(AgendaForm agendaForm, Long id) throws ParseException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Date data = formatter.parse(agendaForm.getData());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(data);
+        calendar.add(Calendar.MINUTE, 30);
+        Date dataMais30Min = calendar.getTime();
+
+        List<Agenda> agendas = agendaRepository.findAgendamento(Long.parseLong(agendaForm.getFuncionario()),data,dataMais30Min);
+
+        if (!agendas.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Existe agendamento no horario selecionado!<br> <button type=\"button\" class=\"btn btn-primary\" onclick=\"window.location.href='/agenda'\">Voltar</button>\n");
+        }
 
         Agenda agenda = new Agenda();
+
         if (id != null) {
             agenda = excluirServicos(id,agendaForm);
         }
 
-        Cliente cliente = clienteService.findById(Long.parseLong(agendaForm.getClienteId()));
-        Usuario usuario = usuarioService.findById(Long.parseLong(agendaForm.getUsuarioId()));
-        Funcionario funcionario = funcionarioService.findById(Long.parseLong(agendaForm.getFuncionarioId()));
+        Cliente cliente = clienteService.findById(Long.parseLong(agendaForm.getCliente()));
+        Usuario usuario = usuarioService.findById(Long.parseLong(agendaForm.getUsuario()));
+        Funcionario funcionario = funcionarioService.findById(Long.parseLong(agendaForm.getFuncionario()));
 
         List<Servico> servicos = new ArrayList<>();
         if(Objects.nonNull(agendaForm.getServicoIds())) {
@@ -72,6 +84,8 @@ public class AgendaService {
             agenda.getAgendaServicos().add(agendaServico);
         }
         agendaRepository.save(agenda);
+
+        return ResponseEntity.ok("Agendamento realizado!<br> <button type=\"button\" class=\"btn btn-primary\" onclick=\"window.location.href='/agenda'\">Voltar</button>\n");
     }
     private Agenda excluirServicos(Long id,AgendaForm agendaForm) {
         Agenda agenda = findById(id);

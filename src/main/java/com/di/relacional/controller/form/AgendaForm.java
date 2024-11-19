@@ -17,8 +17,8 @@ public class AgendaForm {
     private String descricao;
     private String data;
     private List<String> servicoIds;
-    private String clienteId;
-    private String usuarioId;
-    private String funcionarioId;
+    private String cliente;
+    private String usuario;
+    private String funcionario;
 
 }

@@ -28,11 +28,6 @@ public class AgendaController {
     @Autowired
     private ClienteService clienteService;
 
-    @GetMapping("/api")
-    public List<Agenda> buscarTodosAPI(){
-        return agendaService.findAll();
-    }
-
     @GetMapping
     public ModelAndView buscarTodos(){
         ModelAndView modelAndView = new ModelAndView("agenda");
@@ -52,19 +47,19 @@ public class AgendaController {
     }
 
     @PostMapping("/salvar")
-    public ModelAndView salvarAgenda(@ModelAttribute AgendaForm agendaForm) throws ParseException {
+    public ResponseEntity<String> salvarAgenda(@ModelAttribute AgendaForm agendaForm) throws ParseException {
 
-        agendaService.saveAndUpdate(agendaForm,null);
+        return agendaService.saveAndUpdate(agendaForm,null);
 
-        return new ModelAndView("redirect:/agenda");
+//        return new ModelAndView("redirect:/agenda");
     }
 
     @PostMapping("/salvar/{id}")
-    public ModelAndView atualizarAgenda(@PathVariable(required = false) Long id,@ModelAttribute AgendaForm agendaForm) throws ParseException {
+    public ResponseEntity<String> atualizarAgenda(@PathVariable(required = false) Long id,@ModelAttribute AgendaForm agendaForm) throws ParseException {
 
-        agendaService.saveAndUpdate(agendaForm,id);
+        return agendaService.saveAndUpdate(agendaForm,id);
 
-        return new ModelAndView("redirect:/agenda");
+//        return new ModelAndView("redirect:/agenda");
     }
 
     @GetMapping("/editar/{id}")
